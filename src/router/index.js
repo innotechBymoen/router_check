@@ -9,15 +9,48 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: HomePage
+    component: HomePage,
+    name: `Home Page`,
+    meta: [
+      {
+        name: `description`,
+        content: `This is the home page`
+      },
+      {
+        name: `author`,
+        content: `Alex Bymoen`
+      },
+    ]
   },
   {
     path: '/about',
-    component: AboutPage
+    component: AboutPage,
+    name: `About Page`,
+    meta: [
+      {
+        name: `description`,
+        content: `This is the about page`
+      },
+      {
+        name: `author`,
+        content: `Alice`
+      },
+    ]
   },
   {
     path: '/menu',
-    component: MenuPage
+    component: MenuPage,
+    name: `Menu Page`,
+    meta: [
+      {
+        name: `description`,
+        content: `This is the menu page`
+      },
+      {
+        name: `author`,
+        content: `Bob`
+      },
+    ]
   }
 ]
 
@@ -26,5 +59,14 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  document.querySelectorAll(`.meta_remove`).forEach(tag => tag.remove());
+  document.querySelector(`title`)[`innerText`] = to[`name`];
+  to[`meta`].forEach(meta => document.querySelector(`head`).insertAdjacentHTML(`beforeend`, `<meta class="meta_remove" name="${meta[`name`]}" content="${meta[`content`]}">`));
+  
+  from;
+  next();
+});
 
 export default router
